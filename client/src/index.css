@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-sans: "Outfit", "Segoe UI", sans-serif;
+  --color-cream: #f4efe4;
+  --color-cream-deep: #e6dccb;
+  --color-ink: #17211e;
+  --color-teal: #0e4b48;
+  --color-teal-dark: #083331;
+  --color-sand: #c4a15a;
+  --color-terracotta: #b85c38;
+  --color-mist: #5c6b66;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-cream);
+  color: var(--color-ink);
+  overflow-x: clip;
+}
+
+img {
+  max-width: 100%;
+}
+
+input,
+textarea,
+select {
+  max-width: 100%;
+  min-width: 0;
+}
+
+dialog {
+  width: min(32rem, calc(100vw - 1rem));
+  max-height: calc(100dvh - 1rem);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: auto;
+}
+
+dialog::backdrop {
+  background: rgba(23, 33, 30, 0.62);
+}
