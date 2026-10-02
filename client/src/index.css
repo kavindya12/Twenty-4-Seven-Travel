@@ -3,14 +3,55 @@
 @theme {
   --font-display: "Fraunces", "Times New Roman", serif;
   --font-sans: "Outfit", "Segoe UI", sans-serif;
-  --color-cream: #f4efe4;
-  --color-cream-deep: #e6dccb;
-  --color-ink: #17211e;
-  --color-teal: #0e4b48;
-  --color-teal-dark: #083331;
-  --color-sand: #c4a15a;
-  --color-terracotta: #b85c38;
-  --color-mist: #5c6b66;
+  --color-cream: #f6f4f1;
+  --color-cream-deep: #e7e2da;
+  --color-ink: #14181c;
+  --color-teal: #1b4338;
+  --color-teal-dark: #102820;
+  --color-sand: #e7b15a;
+  --color-terracotta: #e15a3a;
+  --color-mist: #5e675f;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee-vertical: marquee-vertical 40s linear infinite;
+  --animate-kenburns: kenburns 22s ease-in-out infinite alternate;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes kenburns {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.12);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
 }
 
 html {
@@ -49,4 +90,18 @@ dialog {
 
 dialog::backdrop {
   background: rgba(23, 33, 30, 0.62);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

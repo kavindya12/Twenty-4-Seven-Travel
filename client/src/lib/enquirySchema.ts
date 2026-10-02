@@ -33,4 +33,9 @@ export const enquiryFormSchema = z.object({
 
 export type EnquiryFormValues = z.infer<typeof enquiryFormSchema>
 
+export const BOOKING_MESSAGE =
+  "I would like to book this trip. Please share availability and the next steps."
+
+export const INFO_MESSAGE = "I would like more information about this trip."
+
 export const GENERAL_MESSAGE = "I would like help planning a trip."
