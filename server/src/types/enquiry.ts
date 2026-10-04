@@ -2,15 +2,26 @@ export const enquiryStatuses = ["new", "contacted", "follow-up", "confirmed", "c
 
 export type EnquiryStatus = (typeof enquiryStatuses)[number]
 
+export type TravelerCounts = {
+  adults: number
+  youth: number
+  children: number
+  infants: number
+}
+
 export type Enquiry = {
   id: string
   name: string
   email: string
-  phone?: string
+  phone: string
   packageId: string
   packageName: string
+  origin: string
+  destination: string
+  tripType: string
   travelDate: string
-  travelers: number
+  returnDate?: string
+  travelers: TravelerCounts
   message: string
   status: EnquiryStatus
   createdAt: string
@@ -19,10 +30,14 @@ export type Enquiry = {
 export type EnquiryInput = {
   name: string
   email: string
-  phone?: string
+  phone: string
   packageId: string
   packageName: string
+  origin: string
+  destination: string
+  tripType: string
   travelDate: string
-  travelers: number
+  returnDate?: string
+  travelers: TravelerCounts
   message: string
 }

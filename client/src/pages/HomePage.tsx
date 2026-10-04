@@ -50,21 +50,20 @@ export function HomePage() {
   return (
     <MotionConfig reducedMotion="user">
       <section className="relative bg-cream">
-        <div className="relative h-[400px] overflow-hidden sm:h-[500px]">
+        <div className="relative h-[400px] overflow-hidden sm:h-[480px] lg:h-[520px]">
           <img
             src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=2200&q=80"
             alt="A mountain ridge in clear light"
             className="absolute inset-0 h-full w-full object-cover object-center"
           />
-          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-ink/40 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-cream" />
         </div>
-        <div className="relative z-10 -mt-44 px-4 text-center sm:-mt-56">
+        <div className="relative z-10 -mt-44 px-4 text-center sm:-mt-60 lg:-mt-96">
           <p className="text-[11px] font-medium tracking-[0.28em] text-white/90 uppercase [text-shadow:0_1px_8px_rgba(0,0,0,0.45)]">
             Popular destinations
           </p>
           <div
-            className="mt-4 flex items-end justify-center gap-3 sm:gap-6"
+            className="mt-5 flex items-end justify-center gap-2.5 sm:gap-4 lg:gap-6"
             onMouseEnter={() => setSpotPaused(true)}
             onMouseLeave={() => setSpotPaused(false)}
           >
@@ -80,10 +79,10 @@ export function HomePage() {
                 >
                   <Link
                     to="/destinations"
-                    className={`group relative block overflow-hidden border-[3px] border-white bg-white shadow-[0_16px_40px_rgba(20,24,28,0.16)] ${
+                    className={`group relative block overflow-hidden border-[3px] border-white bg-white shadow-[0_18px_40px_rgba(20,24,28,0.18)] ${
                       index === 1
-                        ? "h-36 w-[7.25rem] rounded-[1.5rem] sm:h-60 sm:w-52"
-                        : "h-28 w-24 rounded-[1.25rem] sm:h-52 sm:w-44"
+                        ? "h-44 w-[7.75rem] rounded-[1.6rem] sm:h-72 sm:w-52 md:h-80 md:w-60 lg:h-96 lg:w-72"
+                        : "h-36 w-[6.5rem] rounded-[1.35rem] sm:h-60 sm:w-44 md:h-72 md:w-52 lg:h-80 lg:w-60"
                     }`}
                   >
                     <img
@@ -92,7 +91,7 @@ export function HomePage() {
                       className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-ink/15 to-ink/25" />
-                    <p className="absolute inset-0 flex items-center justify-center px-2 text-center font-display text-base leading-tight text-white sm:text-2xl">
+                    <p className="absolute inset-0 flex items-center justify-center px-3 text-center font-display text-lg leading-tight text-white sm:text-2xl lg:text-3xl">
                       {destination.name}
                     </p>
                   </Link>
@@ -100,7 +99,12 @@ export function HomePage() {
               ))}
             </AnimatePresence>
           </div>
-          <div className="mx-auto max-w-2xl pb-14 pt-8 sm:pb-16 sm:pt-10">
+          <p className="mt-6 flex items-center justify-center gap-3 font-display text-2xl text-ink sm:mt-8 sm:text-3xl">
+            <span className="h-px w-8 bg-sand sm:w-10" aria-hidden="true" />
+            Twenty 4 Seven Travel
+            <span className="h-px w-8 bg-sand sm:w-10" aria-hidden="true" />
+          </p>
+          <div className="mx-auto max-w-2xl pb-14 pt-5 sm:pb-16 sm:pt-6">
             <h1 className="font-display text-[2.35rem] leading-[1.05] text-ink sm:text-5xl lg:text-6xl">
               Trips built around the way you actually travel.
             </h1>

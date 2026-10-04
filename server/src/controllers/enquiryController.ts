@@ -14,19 +14,28 @@ export async function createEnquiry(req: Request, res: Response) {
     return
   }
 
-  const phone = typeof parsed.data.phone === "string" ? parsed.data.phone.trim() : ""
+  const returnDate = parsed.data.tripType === "round-trip" ? parsed.data.returnDate?.trim() : ""
 
   let enquiry
   try {
     enquiry = await addEnquiry({
       name: parsed.data.name,
       email: parsed.data.email,
-      phone: phone || undefined,
+      phone: parsed.data.phone,
       packageId: parsed.data.packageId,
       packageName: parsed.data.packageName,
+      origin: parsed.data.origin,
+      destination: parsed.data.destination,
+      tripType: parsed.data.tripType,
       travelDate: parsed.data.travelDate,
-      travelers: parsed.data.travelers,
-      message: parsed.data.message,
+      returnDate: returnDate || undefined,
+      travelers: {
+        adults: parsed.data.adults,
+        youth: parsed.data.youth,
+        children: parsed.data.children,
+        infants: parsed.data.infants,
+      },
+      message: parsed.data.message?.trim() ?? "",
     })
   } catch (error) {
     console.error("Failed to store enquiry", error)

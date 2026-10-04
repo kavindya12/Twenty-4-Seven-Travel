@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { destinations, getPackagesByDestination } from "../data/trips"
+import { destinations, formatPrice, getPackagesByDestination } from "../data/trips"
 
 export function DestinationsPage() {
   return (
@@ -19,13 +19,27 @@ export function DestinationsPage() {
                 <p className="text-xs font-semibold tracking-[0.16em] text-sand uppercase">{destination.region}</p>
                 <h2 className="mt-2 font-display text-3xl sm:text-4xl">{destination.name}</h2>
                 <p className="mt-3 text-mist">{destination.summary}</p>
-                <ul className="mt-5 space-y-2">
+                <p className="mt-3 leading-7 text-ink/80">{destination.details}</p>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {destination.places.map((place) => (
+                    <li key={place} className="rounded-full bg-cream px-3 py-1 text-sm text-ink">
+                      {place}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-4 text-sm leading-6 text-mist">
+                  <span className="font-medium text-ink">Best time. </span>
+                  {destination.bestTime}
+                </p>
+                <ul className="mt-5 space-y-2 border-t border-ink/10 pt-4">
                   {trips.map((trip) => (
-                    <li key={trip.id}>
+                    <li key={trip.id} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                       <Link to={`/tours/${trip.id}`} className="font-medium text-teal hover:underline">
                         {trip.title}
                       </Link>
-                      <span className="text-sm text-mist"> · {trip.duration}</span>
+                      <span className="text-sm text-mist">
+                        {trip.duration} · {formatPrice(trip.price)}
+                      </span>
                     </li>
                   ))}
                 </ul>

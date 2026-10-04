@@ -1,11 +1,18 @@
 export type EnquiryPayload = {
   name: string
   email: string
-  phone?: string
+  phone: string
   packageId: string
   packageName: string
+  origin: string
+  destination: string
+  tripType: string
   travelDate: string
-  travelers: number
+  returnDate?: string
+  adults: number
+  youth: number
+  children: number
+  infants: number
   message: string
 }
 

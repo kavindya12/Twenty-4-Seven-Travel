@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="bg-ink text-cream">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-5 md:grid-cols-4">
         <div className="md:col-span-2">
-          <img src="/logo.png" alt="Twenty 4 Seven Travel" className="h-28 w-auto rounded-2xl bg-white p-2 sm:h-36" />
+          <img src="/logo.png" alt="Twenty 4 Seven Travel" className="h-16 w-auto rounded-xl bg-white p-2 sm:h-20" />
           <p className="mt-3 max-w-sm text-sm leading-6 text-cream/70">
             Tailor-made trips for holidays, honeymoons, and short escapes. An agent reads every enquiry.
           </p>

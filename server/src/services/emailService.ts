@@ -16,6 +16,21 @@ function statusLabel(status: Enquiry["status"]) {
   return status.charAt(0).toUpperCase() + status.slice(1)
 }
 
+function tripTypeLabel(tripType: string) {
+  if (tripType === "round-trip") return "Round Trip"
+  return "One Way"
+}
+
+function travelerLines(enquiry: Enquiry) {
+  const { adults, youth, children, infants } = enquiry.travelers
+  const total = adults + youth + children + infants
+  return `Adults: ${adults}
+Youth: ${youth}
+Children: ${children}
+Infants: ${infants}
+Total: ${total}`
+}
+
 function agentEmail(enquiry: Enquiry) {
   return {
     to: process.env.AGENT_EMAIL ?? "",
@@ -32,20 +47,32 @@ ${enquiry.name}
 Email:
 ${enquiry.email}
 
-Phone:
-${enquiry.phone || "Not provided"}
+Phone / WhatsApp:
+${enquiry.phone}
 
 Package:
 ${enquiry.packageName}
 
+From:
+${enquiry.origin}
+
+To:
+${enquiry.destination}
+
+Trip Type:
+${tripTypeLabel(enquiry.tripType)}
+
 Travel Date:
 ${formatLongDate(enquiry.travelDate)}
 
-Number of Travelers:
-${enquiry.travelers}
+Return Date:
+${enquiry.returnDate ? formatLongDate(enquiry.returnDate) : "Not required"}
+
+Travelers:
+${travelerLines(enquiry)}
 
 Message:
-${enquiry.message}
+${enquiry.message || "Not provided"}
 
 Status:
 ${statusLabel(enquiry.status)}

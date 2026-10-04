@@ -79,7 +79,7 @@ select {
 }
 
 dialog {
-  width: min(32rem, calc(100vw - 1rem));
+  width: min(40rem, calc(100vw - 1rem));
   max-height: calc(100dvh - 1rem);
   margin: auto;
   padding: 0;
