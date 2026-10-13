@@ -33,12 +33,16 @@ Backend variables in `server/.env`:
 ```env
 PORT=5000
 FRONTEND_URL=http://localhost:5173
+AGENT_EMAIL=contact@twenty4seventravel.com
+FROM_EMAIL=contact@twenty4seventravel.com
+SMTP_HOST=smtp.office365.com
+SMTP_PORT=587
+SMTP_USER=contact@twenty4seventravel.com
+SMTP_PASS=
 RESEND_API_KEY=
-AGENT_EMAIL=agent@example.com
-FROM_EMAIL=website@example.com
 ```
 
-Leave `RESEND_API_KEY` empty while developing. The API still saves the enquiry and prints both emails in the server terminal. Add a Resend key, a verified `FROM_EMAIL`, and the agent address when you want real mail.
+The desk mailbox is on Microsoft 365. Put that mailbox password in `SMTP_PASS` so Send Inquiry delivers the full enquiry to `AGENT_EMAIL`. Until that password is set, the API still saves the enquiry and prints the email in the server terminal, and the form says the notification could not be sent.
 
 Frontend variable in `client/.env`:
 

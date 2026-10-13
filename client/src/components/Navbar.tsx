@@ -14,11 +14,11 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-cream/95 backdrop-blur">
-      <div className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 py-2.5 sm:px-6 sm:py-3">
-        <NavLink to="/" className="justify-self-start" onClick={() => setOpen(false)} aria-label="Twenty 4 Seven Travel">
-          <img src="/logo.png" alt="Twenty 4 Seven Travel" className="h-11 w-auto sm:h-14" />
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6 sm:py-3 lg:grid lg:grid-cols-[1fr_auto_1fr]">
+        <NavLink to="/" className="min-w-0 lg:justify-self-start" onClick={() => setOpen(false)} aria-label="Twenty 4 Seven Travel">
+          <img src="/logo.png" alt="Twenty 4 Seven Travel" className="h-10 w-auto max-w-[10.5rem] object-contain object-left sm:h-14 sm:max-w-none" />
         </NavLink>
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center justify-center gap-8 lg:flex">
           {links.map((link) => (
             <NavLink
               key={link.to}
@@ -40,36 +40,38 @@ export function Navbar() {
           </NavLink>
           <button
             type="button"
-            className="rounded-full p-2 text-ink lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-ink ring-1 ring-ink/10 lg:hidden"
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((value) => !value)}
           >
-            {open ? <X /> : <Menu />}
+            {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
       {open ? (
-        <nav className="flex flex-col gap-1 border-t border-ink/10 px-4 py-3 lg:hidden">
-          {links.map((link) => (
+        <nav className="border-t border-ink/10 px-4 py-3 lg:hidden">
+          <div className="mx-auto flex max-w-6xl flex-col">
+            {links.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                onClick={() => setOpen(false)}
+                className={({ isActive }) =>
+                  `border-b border-ink/10 px-1 py-3.5 text-base font-medium ${isActive ? "text-terracotta" : "text-ink"}`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
             <NavLink
-              key={link.to}
-              to={link.to}
+              to="/contact"
               onClick={() => setOpen(false)}
-              className={({ isActive }) =>
-                `rounded-xl px-2 py-3 text-base font-medium ${isActive ? "text-terracotta" : "text-ink"}`
-              }
+              className="mt-4 rounded-full bg-ink px-4 py-3 text-center text-sm font-medium text-cream"
             >
-              {link.label}
+              Find an agent
             </NavLink>
-          ))}
-          <NavLink
-            to="/contact"
-            onClick={() => setOpen(false)}
-            className="mt-1 rounded-full bg-ink px-4 py-3 text-center text-sm font-medium text-cream"
-          >
-            Find an agent
-          </NavLink>
+          </div>
         </nav>
       ) : null}
     </header>

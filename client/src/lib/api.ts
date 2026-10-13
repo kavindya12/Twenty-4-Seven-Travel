@@ -62,9 +62,5 @@ export async function submitEnquiry(payload: EnquiryPayload) {
     )
   }
 
-  if (body.message && body.message !== "Enquiry submitted successfully") {
-    return body.message
-  }
-
-  return "Your enquiry has been submitted successfully!"
+  return "Thank you. Our agent will contact you soon."
 }

@@ -48,11 +48,10 @@ export async function createEnquiry(req: Request, res: Response) {
 
   try {
     const emailResult = await sendEnquiryEmails(enquiry)
-    if (emailResult.attempted && !emailResult.delivered) {
+    if (!emailResult.delivered) {
       res.status(200).json({
         success: true,
-        message:
-          "Your enquiry was saved, but we could not send the notification email. Our team still has your request.",
+        message: "Thank you. Our agent will contact you soon.",
       })
       return
     }
@@ -60,14 +59,13 @@ export async function createEnquiry(req: Request, res: Response) {
     console.error("Failed to send enquiry email", error)
     res.status(200).json({
       success: true,
-      message:
-        "Your enquiry was saved, but we could not send the notification email. Our team still has your request.",
+      message: "Thank you. Our agent will contact you soon.",
     })
     return
   }
 
   res.status(201).json({
     success: true,
-    message: "Enquiry submitted successfully",
+    message: "Thank you. Our agent will contact you soon.",
   })
 }

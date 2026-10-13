@@ -38,7 +38,7 @@ export function ContactPage() {
             </li>
             <li>
               <a
-                href="mailto:agent@example.com"
+                href="mailto:Contact@twenty4seventravel.com"
                 className="flex items-center gap-4 rounded-2xl bg-white/12 px-4 py-4 ring-1 ring-white/20 backdrop-blur-md transition hover:bg-white/20"
               >
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sand text-teal-dark">
@@ -46,7 +46,7 @@ export function ContactPage() {
                 </span>
                 <span>
                   <span className="block text-xs font-medium tracking-[0.16em] text-cream/70 uppercase">Email</span>
-                  <span className="mt-0.5 block text-lg font-medium">agent@example.com</span>
+                  <span className="mt-0.5 block text-lg font-medium">Contact@twenty4seventravel.com</span>
                 </span>
               </a>
             </li>
