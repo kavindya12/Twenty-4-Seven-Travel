@@ -11,8 +11,11 @@ export type Destination = {
 
 export type TourType = "Adventure" | "Seaside" | "Cruise" | "Self-guided"
 
+import { evoqueImages } from "../lib/evoqueAssets"
+
 export type TravelPackage = {
   id: string
+  slug: string
   title: string
   destination: string
   destinationId: string
@@ -129,15 +132,18 @@ export const tourTypes: { name: TourType; image: string; text: string }[] = [
   },
 ]
 
+const evoquePhoto = (src: string, alt: string) => [{ src, alt }]
+
 export const packages: TravelPackage[] = [
   {
     id: "sri-lanka-hill-coast",
+    slug: "sri-lanka-hill-coast",
     title: "Hill Country & Coast",
     destination: "Sri Lanka",
     destinationId: "sri-lanka",
     duration: "7 Days",
     nights: "6 Nights",
-    price: 890,
+    price: 699,
     image:
       "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=1400&q=80",
     photos: [
@@ -157,134 +163,138 @@ export const packages: TravelPackage[] = [
     featured: true,
   },
   {
-    id: "maldives-reef-stay",
-    title: "Reef Stay",
-    destination: "Maldives",
-    destinationId: "maldives",
+    id: "bali-magic",
+    slug: "bali-magic",
+    title: "Bali Magic",
+    destination: "Indonesia",
+    destinationId: "indonesia",
     duration: "5 Days",
     nights: "4 Nights",
-    price: 1480,
-    image:
-      "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1400&q=80",
-    photos: [
-      {
-        src: "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=1200&q=80",
-        alt: "Overwater villas in clear Maldives water",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
-        alt: "A swimmer over a coral reef",
-      },
-    ],
+    price: 749,
+    image: evoqueImages.tripBali,
+    photos: evoquePhoto(evoqueImages.tripBali, "Bali temples and coast"),
     description:
-      "One island, a simple transfer, and time in the water. Built for a short break, not a resort circuit.",
-    highlights: ["Speedboat transfer", "House reef", "Sandbank afternoon", "Sunset dhoni"],
+      "Temple mornings, rice-terrace walks, and a beach finish — paced for a first Bali trip with transfers arranged.",
+    highlights: ["Ubud", "Tanah Lot", "Water temple", "Seminyak stay"],
     type: "Seaside",
     featured: true,
   },
   {
-    id: "japan-rail-route",
-    title: "Rail Route",
-    destination: "Japan",
-    destinationId: "japan",
-    duration: "10 Days",
-    nights: "9 Nights",
-    price: 2140,
-    image:
-      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1400&q=80",
-    photos: [
-      {
-        src: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=1200&q=80",
-        alt: "Red temple gates along a path in Kyoto",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=1200&q=80",
-        alt: "Mount Fuji above a lake",
-      },
-    ],
+    id: "phuket-phi-phi",
+    slug: "phuket-phi-phi",
+    title: "Phuket & Phi Phi",
+    destination: "Thailand",
+    destinationId: "thailand",
+    duration: "6 Days",
+    nights: "5 Nights",
+    price: 745,
+    image: evoqueImages.trip2,
+    photos: evoquePhoto(evoqueImages.trip2, "Thailand islands"),
+    description: "Phuket base with a Phi Phi day on the water. Longtail boats, viewpoints, and unhurried beach time.",
+    highlights: ["Phi Phi islands", "Viewpoint hike", "Longtail cruise", "Phuket old town"],
+    type: "Seaside",
+    featured: true,
+  },
+  {
+    id: "vietnam-group-tour",
+    slug: "vietnam-group-tour",
+    title: "Vietnam (Group Tour)",
+    destination: "Vietnam",
+    destinationId: "vietnam",
+    duration: "8 Days",
+    nights: "7 Nights",
+    price: 1_375,
+    image: evoqueImages.trip3,
+    photos: evoquePhoto(evoqueImages.trip3, "Vietnam landscapes"),
     description:
-      "Tokyo, a night in the mountains, then Kyoto. Neighbourhood walks instead of a checklist of every shrine.",
-    highlights: ["Tokyo", "Hakone", "Kyoto", "Nara half day"],
+      "North to central Vietnam with a fixed group route — Ha Long, Hanoi, and Hoi An with a lead guide throughout.",
+    highlights: ["Ha Long Bay", "Hanoi old quarter", "Hoi An", "Group guide"],
+    type: "Adventure",
+    featured: true,
+  },
+  {
+    id: "bali-group-tour",
+    slug: "bali-group-tour",
+    title: "Bali (Group Tour)",
+    destination: "Indonesia",
+    destinationId: "indonesia",
+    duration: "5 Days",
+    nights: "6 Nights",
+    price: 820,
+    image: evoqueImages.trip4,
+    photos: evoquePhoto(evoqueImages.trip4, "Bali group travel"),
+    description: "Shared departures across Bali’s highlights with hotels and transfers included in the group rate.",
+    highlights: ["Shared transport", "Ubud stay", "Beach club day", "Lead guide"],
     type: "Self-guided",
     featured: true,
   },
   {
-    id: "costa-rica-wildlife",
-    title: "Wildlife Week",
-    destination: "Costa Rica",
-    destinationId: "costa-rica",
-    duration: "6 Days",
-    nights: "5 Nights",
-    price: 1320,
-    image:
-      "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=1400&q=80",
-    photos: [
-      {
-        src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80",
-        alt: "Sunlight through a cloud-forest canopy",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=1200&q=80",
-        alt: "A sloth resting in a tree",
-      },
-    ],
-    description:
-      "Cloud forest and a Pacific beach finish, with lodges that are easy to reach and guides who stay with the group.",
-    highlights: ["Monteverde", "Night walk", "Manuel Antonio", "Shared guide"],
-    type: "Adventure",
-    featured: false,
-  },
-  {
-    id: "iceland-south-coast",
-    title: "South Coast",
-    destination: "Iceland",
-    destinationId: "iceland",
-    duration: "8 Days",
-    nights: "7 Nights",
-    price: 1960,
-    image:
-      "https://images.unsplash.com/photo-1476610182048-b716b8518aae?auto=format&fit=crop&w=1400&q=80",
-    photos: [
-      {
-        src: "https://images.unsplash.com/photo-1529963183134-61a90db47eaf?auto=format&fit=crop&w=1200&q=80",
-        alt: "Ice floating on a glacier lagoon",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1531168556467-80aace0d0144?auto=format&fit=crop&w=1200&q=80",
-        alt: "Black sand and sea stacks on an Iceland beach",
-      },
-    ],
-    description:
-      "Waterfalls, a glacier lagoon, and Reykjavík on either end. Driving days are short enough to stop.",
-    highlights: ["Reykjavík", "Golden Circle", "Vík", "Jökulsárlón"],
+    id: "bangkok-unveiled",
+    slug: "bangkok-unveiled",
+    title: "Bangkok Unveiled",
+    destination: "Thailand",
+    destinationId: "thailand",
+    duration: "4 Days",
+    nights: "3 Nights",
+    price: 450,
+    image: evoqueImages.trip5,
+    photos: evoquePhoto(evoqueImages.trip5, "Bangkok city"),
+    description: "Short city break: river temples, markets, and rooftops — ideal before a beach extension.",
+    highlights: ["Grand Palace area", "Chao Phraya", "Street food walk", "Sky-bar evening"],
     type: "Self-guided",
-    featured: false,
+    featured: true,
   },
   {
-    id: "amalfi-slow-week",
-    title: "Slow Coast",
-    destination: "Italy",
-    destinationId: "italy",
-    duration: "7 Days",
-    nights: "6 Nights",
-    price: 1680,
-    image:
-      "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1400&q=80",
+    id: "endless-blues-maldives",
+    slug: "endless-blues-maldives",
+    title: "Endless Blues – Maldives",
+    destination: "Maldives",
+    destinationId: "maldives",
+    duration: "4 Days",
+    nights: "3 Nights",
+    price: 575,
+    image: evoqueImages.tripHeroWide,
     photos: [
-      {
-        src: "https://images.unsplash.com/photo-1498307833015-e7b400441eb8?auto=format&fit=crop&w=1200&q=80",
-        alt: "Boats gathered in a Mediterranean harbor",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=1200&q=80",
-        alt: "Cliffside houses above the Amalfi coast",
-      },
+      { src: evoqueImages.tripHeroWide, alt: "Maldives lagoon" },
+      { src: evoqueImages.trip4, alt: "Overwater villas" },
     ],
+    description: "One island, speedboat transfer, and full days on the reef — built as a compact Maldives escape.",
+    highlights: ["Speedboat transfer", "House reef", "Sandbank hour", "Sunset fishing"],
+    type: "Seaside",
+    featured: true,
+  },
+  {
+    id: "singapore-city-tour",
+    slug: "singapore-city-tour",
+    title: "Singapore – City Tour",
+    destination: "Singapore",
+    destinationId: "singapore",
+    duration: "3 Days",
+    nights: "2 Nights",
+    price: 600,
+    image: evoqueImages.trip6,
+    photos: evoquePhoto(evoqueImages.trip6, "Singapore skyline"),
+    description: "Gardens, neighbourhoods, and food halls in a tight long weekend with airport transfers handled.",
+    highlights: ["Marina Bay", "Gardens by the Bay", "Chinatown", "Hawker centres"],
+    type: "Self-guided",
+    featured: true,
+  },
+  {
+    id: "malaysia-golden-escape",
+    slug: "malaysia-golden-escape",
+    title: "Malaysia – The Golden Escape",
+    destination: "Malaysia",
+    destinationId: "malaysia",
+    duration: "4 Days",
+    nights: "3 Nights",
+    price: 390,
+    image: evoqueImages.trip7,
+    photos: evoquePhoto(evoqueImages.trip7, "Malaysia travel"),
     description:
-      "One base on the coast, a boat day, and trains into two towns. No daily hotel changes.",
-    highlights: ["Sorrento base", "Capri boat", "Positano", "Naples evening"],
-    type: "Cruise",
-    featured: false,
+      "Experience the best of Malaysia in just 4 days — from the iconic skyline of Kuala Lumpur to the cool misty heights of Genting Highland, with culture, food, and easy transfers.",
+    highlights: ["KL towers", "Batu Caves", "Heritage walk", "Local food tour"],
+    type: "Adventure",
+    featured: true,
   },
 ]
 
@@ -292,8 +302,20 @@ export function getPackage(id: string) {
   return packages.find((item) => item.id === id)
 }
 
+export function getPackageBySlug(slug: string) {
+  return packages.find((item) => item.slug === slug || item.id === slug)
+}
+
 export function getFeaturedPackages() {
   return packages.filter((item) => item.featured)
+}
+
+export function getInboundPackages() {
+  return packages.filter((item) => item.destinationId === "sri-lanka")
+}
+
+export function getOutboundPackages() {
+  return packages.filter((item) => item.destinationId !== "sri-lanka")
 }
 
 export function getPackagesByDestination(destinationId: string) {
@@ -301,9 +323,13 @@ export function getPackagesByDestination(destinationId: string) {
 }
 
 export function formatPrice(price: number) {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-GB", {
     style: "currency",
-    currency: "USD",
+    currency: "GBP",
     maximumFractionDigits: 0,
   }).format(price)
+}
+
+export function formatStartingPrice(price: number) {
+  return formatPrice(price)
 }

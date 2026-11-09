@@ -33,11 +33,11 @@ Backend variables in `server/.env`:
 ```env
 PORT=5000
 FRONTEND_URL=http://localhost:5173
-AGENT_EMAIL=contact@twenty4seventravel.com
-FROM_EMAIL=contact@twenty4seventravel.com
+AGENT_EMAIL=support@twenty4seventravel.com
+FROM_EMAIL=support@twenty4seventravel.com
 SMTP_HOST=smtp.office365.com
 SMTP_PORT=587
-SMTP_USER=contact@twenty4seventravel.com
+SMTP_USER=support@twenty4seventravel.com
 SMTP_PASS=
 RESEND_API_KEY=
 ```

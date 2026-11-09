@@ -1,19 +1,37 @@
+import { MotionConfig } from "motion/react"
+import { BlurFade } from "../components/magic/BlurFade"
+import { PageHero } from "../components/PageHero"
 import { TourCard } from "../components/TourCard"
-import { packages } from "../data/trips"
+import { getOutboundPackages } from "../data/trips"
+import { evoqueImages } from "../lib/evoqueAssets"
 
-export function ToursPage() {
+type ToursPageProps = {
+  scope?: "outbound"
+}
+
+export function ToursPage({ scope = "outbound" }: ToursPageProps) {
+  const list = scope === "outbound" ? getOutboundPackages() : getOutboundPackages()
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-5 sm:py-14">
-      <p className="text-xs font-semibold tracking-[0.18em] text-terracotta uppercase">Trips</p>
-      <h1 className="mt-2 font-display text-4xl sm:text-5xl">Tours</h1>
-      <p className="mt-4 max-w-2xl text-mist">
-        Prices are starting points per person. Open a tour to ask about dates, hotels, and your group.
-      </p>
-      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {packages.map((trip) => (
-          <TourCard key={trip.id} trip={trip} />
-        ))}
+    <MotionConfig reducedMotion="user">
+      <PageHero
+        scriptEyebrow
+        eyebrow="Worldwide"
+        title="Outbound tours"
+        description="Handpicked international trips — prices are starting points per person in GBP."
+        image={evoqueImages.hero}
+      />
+      <div className="bg-cream">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((trip, index) => (
+              <BlurFade key={trip.id} inView delay={0.04 * (index % 6)}>
+                <TourCard trip={trip} />
+              </BlurFade>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </MotionConfig>
   )
 }

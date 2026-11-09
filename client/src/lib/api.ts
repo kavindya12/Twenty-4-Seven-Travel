@@ -26,8 +26,14 @@ export class EnquirySubmitError extends Error {
   }
 }
 
+import { appendEnquiryToGoogleSheet } from "./googleSheets"
+
 const LOCAL_API = import.meta.env.VITE_API_URL || "http://localhost:5000"
-const DESK_EMAIL = "Contact@twenty4seventravel.com"
+const DESK_EMAIL = "support@twenty4seventravel.com"
+
+async function logEnquiryToSheet(payload: EnquiryPayload) {
+  void appendEnquiryToGoogleSheet(payload)
+}
 
 function tripLabel(tripType: string) {
   return tripType === "round-trip" ? "Round Trip" : "One Way"
@@ -67,6 +73,7 @@ async function submitToLocalApi(payload: EnquiryPayload) {
     )
   }
 
+  void logEnquiryToSheet(payload)
   return "Thank you. Our agent will contact you soon."
 }
 
@@ -116,12 +123,13 @@ async function submitToDesk(payload: EnquiryPayload) {
   }
 
   if (body.success === true || body.success === "true") {
+    void logEnquiryToSheet(payload)
     return "Thank you. Our agent will contact you soon."
   }
 
   if (body.message?.toLowerCase().includes("activation")) {
     throw new EnquirySubmitError(
-      "Open Contact@twenty4seventravel.com and click Activate Form, then send the enquiry again.",
+      "Open support@twenty4seventravel.com and click Activate Form, then send the enquiry again.",
     )
   }
 

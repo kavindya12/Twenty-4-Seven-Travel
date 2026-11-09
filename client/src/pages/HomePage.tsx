@@ -1,18 +1,28 @@
-import { BadgeCheck, Clock3, MapPinned, Wallet } from "lucide-react"
-import { AnimatePresence, MotionConfig, motion } from "motion/react"
-import { useEffect, useState } from "react"
+import { BadgeCheck, Clock3, Compass, Headphones, Luggage, ShieldCheck } from "lucide-react"
+import { MotionConfig } from "motion/react"
 import { Link } from "react-router-dom"
+import { RecommendedTripsSection } from "../components/RecommendedTripsSection"
+import { SpacedTitle } from "../components/SpacedTitle"
 import { BlurFade } from "../components/magic/BlurFade"
-import { BorderBeam } from "../components/magic/BorderBeam"
 import { Marquee } from "../components/magic/Marquee"
-import { TourCard } from "../components/TourCard"
-import { destinations, getFeaturedPackages, tourTypes } from "../data/trips"
+import { AnimatedCounter } from "../components/motion/AnimatedCounter"
+import { FlightPathDecor } from "../components/motion/FlightPathDecor"
+import { TestimonialsCarousel } from "../components/motion/TestimonialsCarousel"
+import { TornEdge } from "../components/motion/TornEdge"
+import { SectionHeading } from "../components/SectionHeading"
+import { destinations, getOutboundPackages, tourTypes } from "../data/trips"
+import { evoqueImages } from "../lib/evoqueAssets"
 
-const features = [
-  { icon: MapPinned, title: "Routes we know", text: "A short list of places, planned with room between the sights." },
-  { icon: Wallet, title: "Clear starting prices", text: "Figures are per person, before your dates and hotel level." },
-  { icon: BadgeCheck, title: "A real consultant", text: "Every enquiry is read by a person, not an automatic checkout." },
-  { icon: Clock3, title: "A reply, not a wait", text: "Send dates and group size. An agent writes back with options." },
+const trustStats: Array<{
+  icon: typeof Luggage
+  label: string
+  value?: string
+  title?: string
+}> = [
+  { icon: Luggage, value: "6+", label: "Curated destinations" },
+  { icon: Compass, title: "Expert planning", label: "Tailored itineraries around your needs." },
+  { icon: ShieldCheck, title: "Trusted service", label: "Reliable bookings and human review." },
+  { icon: Headphones, title: "24/7 support", label: "We are with you every step of the way." },
 ]
 
 const reviews = [
@@ -31,110 +41,53 @@ const reviews = [
     name: "Rosa Almeida",
     place: "Rail route",
   },
+  {
+    quote: "Clear prices upfront and no pressure to add nights we did not want.",
+    name: "James Chen",
+    place: "Coastal week",
+  },
 ]
 
 export function HomePage() {
-  const featured = getFeaturedPackages()
-  const [spot, setSpot] = useState(0)
-  const [spotPaused, setSpotPaused] = useState(false)
-  const spotlight = [0, 1, 2].map((offset) => destinations[(spot + offset) % destinations.length])
-
-  useEffect(() => {
-    if (spotPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
-    const timer = window.setInterval(() => {
-      setSpot((current) => (current + 1) % destinations.length)
-    }, 5000)
-    return () => window.clearInterval(timer)
-  }, [spotPaused])
+  const outboundPicks = getOutboundPackages()
 
   return (
     <MotionConfig reducedMotion="user">
-      <section className="relative bg-cream">
-        <div className="relative h-[400px] overflow-hidden sm:h-[480px] lg:h-[520px]">
-          <img
-            src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=2200&q=80"
-            alt="A mountain ridge in clear light"
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-cream" />
-        </div>
-        <div className="relative z-10 -mt-44 px-4 text-center sm:-mt-60 lg:-mt-96">
-          <p className="text-[11px] font-medium tracking-[0.28em] text-white/90 uppercase [text-shadow:0_1px_8px_rgba(0,0,0,0.45)]">
-            Popular destinations
-          </p>
-          <div
-            className="mt-5 flex items-end justify-center gap-2.5 sm:gap-4 lg:gap-6"
-            onMouseEnter={() => setSpotPaused(true)}
-            onMouseLeave={() => setSpotPaused(false)}
-          >
-            <AnimatePresence mode="popLayout" initial={false}>
-              {spotlight.map((destination, index) => (
-                <motion.div
-                  key={destination.id}
-                  layout
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -14 }}
-                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <Link
-                    to="/destinations"
-                    className={`group relative block overflow-hidden border-[3px] border-white bg-white shadow-[0_18px_40px_rgba(20,24,28,0.18)] ${
-                      index === 1
-                        ? "h-44 w-[7.75rem] rounded-[1.6rem] sm:h-72 sm:w-52 md:h-80 md:w-60 lg:h-96 lg:w-72"
-                        : "h-36 w-[6.5rem] rounded-[1.35rem] sm:h-60 sm:w-44 md:h-72 md:w-52 lg:h-80 lg:w-60"
-                    }`}
-                  >
-                    <img
-                      src={destination.image}
-                      alt=""
-                      className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-ink/15 to-ink/25" />
-                    <p className="absolute inset-0 flex items-center justify-center px-3 text-center font-display text-lg leading-tight text-white sm:text-2xl lg:text-3xl">
-                      {destination.name}
-                    </p>
-                  </Link>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-          <p className="mt-6 flex items-center justify-center gap-3 font-display text-2xl text-ink sm:mt-8 sm:text-3xl">
-            <span className="h-px w-8 bg-sand sm:w-10" aria-hidden="true" />
-            Twenty 4 Seven Travel
-            <span className="h-px w-8 bg-sand sm:w-10" aria-hidden="true" />
-          </p>
-          <div className="mx-auto max-w-2xl pb-14 pt-5 sm:pb-16 sm:pt-6">
-            <h1 className="font-display text-[2.35rem] leading-[1.05] text-ink sm:text-5xl lg:text-6xl">
-              Trips built around the way you actually travel.
+      <section className="relative min-h-[88vh] overflow-hidden bg-ink">
+        <img
+          src={evoqueImages.hero}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover animate-kenburns"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/45 to-ink/85" />
+        <FlightPathDecor variant="dark" className="opacity-50" />
+        <div className="relative mx-auto flex min-h-[88vh] max-w-6xl flex-col justify-end px-4 pb-14 pt-28 sm:px-5 sm:pb-20 lg:pb-24">
+          <BlurFade delay={0.05}>
+            <p className="font-script text-3xl text-accent-light sm:text-4xl">Twenty 4 Seven Travel</p>
+            <h1 className="mt-2 max-w-3xl font-display text-[2.5rem] leading-[1.02] text-cream sm:text-6xl lg:text-7xl">
+              Discover the unseen
             </h1>
-            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-mist sm:text-[15px]">
-              Holidays, honeymoons, and short escapes. Tell an agent the date, the group, and the pace.
+            <p className="mt-5 max-w-xl text-base leading-7 text-cream/85 sm:text-lg">
+              Discover your next great adventure and uncover unforgettable moments waiting just around the corner.
             </p>
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                to="/destinations"
-                className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-cream transition hover:bg-teal"
-              >
-                Explore destinations
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to="/destinations" className="btn-primary">
+                All destinations
               </Link>
-              <Link
-                to="/contact"
-                className="rounded-full border border-ink/10 bg-white px-5 py-2.5 text-sm font-medium text-ink shadow-sm transition hover:bg-cream-deep"
-              >
-                Plan my trip
+              <Link to="/contact" className="btn-secondary">
+                Start your journey
               </Link>
             </div>
-          </div>
+          </BlurFade>
         </div>
       </section>
 
-      <section className="overflow-hidden border-y border-ink/10 bg-white py-3">
-        <Marquee pauseOnHover className="[--duration:32s] [--gap:2.5rem]">
+      <section className="overflow-hidden border-y border-ink/8 bg-white py-4">
+        <Marquee pauseOnHover className="[--duration:28s] [--gap:3rem]">
           {destinations.map((destination) => (
-            <span key={destination.id} className="flex items-center gap-10 text-sm font-semibold tracking-[0.18em] text-ink/70 uppercase">
+            <span key={destination.id} className="flex items-center gap-10 text-sm font-semibold tracking-[0.2em] text-ink/60 uppercase">
               {destination.name}
-              <span className="text-sand" aria-hidden>
+              <span className="text-terracotta" aria-hidden>
                 ✦
               </span>
             </span>
@@ -142,176 +95,122 @@ export function HomePage() {
         </Marquee>
       </section>
 
-      <section className="relative mx-auto grid max-w-6xl items-center gap-10 overflow-hidden px-4 py-14 sm:px-5 lg:grid-cols-2">
-        <div className="pointer-events-none absolute -top-8 left-10 h-40 w-40 animate-float rounded-full bg-sand/30 blur-3xl" />
-        <BlurFade inView direction="right" className="relative">
-          <img
-            src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1400&q=80"
-            alt="A traveler looking over a city from a window"
-            className="h-72 w-full rounded-3xl object-cover shadow-2xl shadow-ink/10 transition duration-700 hover:scale-[1.02] sm:h-96"
-          />
-        </BlurFade>
-        <BlurFade inView delay={0.1}>
-          <p className="text-xs font-semibold tracking-[0.18em] text-terracotta uppercase">About the desk</p>
-          <h2 className="mt-2 font-display text-3xl leading-tight text-ink sm:text-5xl">
-            A planning desk, not a catalogue you click through alone.
-          </h2>
-          <p className="mt-4 text-base leading-7 text-mist">
-            Looking for a quiet beach week, a first honeymoon, or a route with a bit more walking? Consultants here
-            build the trip around that, then write back with what is included.
-          </p>
-          <Link
-            to="/about"
-            className="mt-6 inline-flex text-sm font-semibold text-teal underline decoration-sand decoration-2 underline-offset-4 transition hover:text-terracotta"
-          >
-            About Twenty 4 Seven Travel
-          </Link>
-        </BlurFade>
-      </section>
+      <div className="relative bg-white">
+        <TornEdge fill="#14181c" className="-mb-px" />
+        <section className="relative overflow-hidden bg-ink py-16 text-cream sm:py-20">
+          <FlightPathDecor variant="dark" />
+          <div className="relative mx-auto max-w-6xl px-4 sm:px-5">
+            <p className="font-script text-3xl text-accent-light">Why travelers choose us</p>
+            <SpacedTitle light className="mt-3 max-w-4xl text-2xl sm:text-4xl lg:text-[2.75rem]">
+              Trusted travel planning. Curated experiences. Stress-free holidays.
+            </SpacedTitle>
+            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {trustStats.map((item, index) => (
+                <BlurFade key={item.title ?? item.value ?? item.label} inView delay={0.05 * index}>
+                  <div className="text-center lg:text-left">
+                    <span className="inline-flex rounded-2xl border border-cream/10 bg-white/5 p-3 text-sand">
+                      <item.icon size={22} />
+                    </span>
+                    {item.value ? (
+                      <p className="mt-4 font-display text-4xl text-accent-light sm:text-5xl">
+                        <AnimatedCounter value={item.value} />
+                      </p>
+                    ) : (
+                      <p className="mt-4 font-display text-xl text-cream capitalize sm:text-2xl">{item.title}</p>
+                    )}
+                    <p className="mt-2 text-sm font-medium text-cream/65">{item.label}</p>
+                  </div>
+                </BlurFade>
+              ))}
+            </div>
+          </div>
+        </section>
+        <TornEdge flip fill="#14181c" className="-mt-px" />
+      </div>
 
-      <section className="border-y border-ink/10 bg-white">
-        <div className="mx-auto grid max-w-6xl gap-4 px-4 py-10 sm:grid-cols-2 sm:px-5 lg:grid-cols-4">
-          {features.map((feature, index) => (
-            <BlurFade key={feature.title} inView delay={0.08 * index}>
-              <article className="group h-full rounded-3xl p-4 transition duration-300 hover:-translate-y-1 hover:bg-cream hover:shadow-lg hover:shadow-ink/5">
-                <span className="inline-flex rounded-2xl bg-teal/10 p-3 text-teal transition duration-300 group-hover:scale-110">
-                  <feature.icon size={22} />
-                </span>
-                <h3 className="mt-4 font-display text-xl">{feature.title}</h3>
-                <p className="mt-1 text-sm leading-6 text-mist">{feature.text}</p>
-              </article>
-            </BlurFade>
+      <RecommendedTripsSection trips={outboundPicks} />
+
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-5">
+        <SectionHeading scriptEyebrow eyebrow="Travel style" title="Choose a tour type" />
+        <div className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {tourTypes.map((type) => (
+            <Link key={type.name} to="/tours/outbound" className="group relative block aspect-[3/4] overflow-hidden rounded-2xl">
+              <img src={type.image} alt="" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-ink/45 transition group-hover:bg-ink/30" />
+              <p className="absolute bottom-4 left-4 font-display text-2xl text-cream">{type.name}</p>
+            </Link>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-5">
-        <BlurFade inView>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-semibold tracking-[0.18em] text-terracotta uppercase">Places</p>
-              <h2 className="mt-2 font-display text-3xl sm:text-4xl">Top destinations</h2>
-            </div>
-            <Link to="/destinations" className="text-sm font-semibold text-teal transition hover:text-terracotta">
-              All destinations
+      <section id="testimonials" className="relative overflow-hidden py-16 sm:py-20">
+        <img src={evoqueImages.testimonialsSky} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-cream/95 via-cream/90 to-cream/95" />
+        <TornEdge fill="#14181c" className="absolute top-0 left-0 w-full" />
+        <div className="relative mx-auto max-w-6xl px-4 pt-10 sm:px-5 sm:pt-14">
+          <SectionHeading
+            scriptEyebrow
+            eyebrow="Our testimonials"
+            title="What our customers say about us"
+            description="Real replies from people who planned with an agent, not a checkout."
+          />
+          <TestimonialsCarousel reviews={reviews} />
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-5 sm:py-20">
+        <div className="surface-card overflow-hidden sm:grid sm:grid-cols-2">
+          <img
+            src={evoqueImages.specialOffer}
+            alt="A quiet beach"
+            className="h-56 w-full object-cover sm:h-full sm:min-h-[18rem]"
+          />
+          <div className="flex flex-col justify-center p-8 sm:p-10 lg:p-12">
+            <p className="font-script text-3xl text-[#3E97B3]">Special offer</p>
+            <h2 className="mt-3 font-display text-3xl leading-tight text-ink sm:text-4xl">
+              Warm-weather trips fill first. Ask before the dates lock.
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-mist">
+              No automatic discount banner. An agent checks availability, then tells you what the trip actually costs.
+            </p>
+            <Link to="/contact" className="btn-primary mt-8 w-fit">
+              Get started
             </Link>
           </div>
-        </BlurFade>
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-          {destinations.map((destination, index) => (
-            <BlurFade key={destination.id} inView delay={0.06 * index} className={index === 0 ? "col-span-2 lg:col-span-1" : undefined}>
-              <Link to="/destinations" className="group relative block h-44 overflow-hidden rounded-3xl sm:h-60">
-                <img
-                  src={destination.image}
-                  alt=""
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/15 to-transparent transition duration-500 group-hover:from-ink/70" />
-                <div className="absolute right-0 bottom-0 left-0 translate-y-1 p-4 text-cream transition duration-500 group-hover:translate-y-0">
-                  <p className="text-[10px] tracking-[0.16em] text-sand uppercase sm:text-xs">{destination.region}</p>
-                  <p className="font-display text-2xl sm:text-3xl">{destination.name}</p>
-                </div>
-              </Link>
-            </BlurFade>
-          ))}
         </div>
       </section>
 
-      <section className="bg-cream-deep/60 py-14">
-        <div className="mx-auto max-w-6xl px-4 sm:px-5">
+      <section className="border-t border-ink/8 bg-white py-14">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 sm:px-5 lg:grid-cols-2">
           <BlurFade inView>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-xs font-semibold tracking-[0.18em] text-terracotta uppercase">Recommended</p>
-                <h2 className="mt-2 font-display text-3xl sm:text-4xl">Tours to start from</h2>
-              </div>
-              <Link to="/tours" className="text-sm font-semibold text-teal transition hover:text-terracotta">
-                View all tours
-              </Link>
-            </div>
-          </BlurFade>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((trip, index) => (
-              <BlurFade key={trip.id} inView delay={0.08 * index}>
-                <TourCard trip={trip} />
-              </BlurFade>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-5">
-        <BlurFade inView>
-          <p className="text-xs font-semibold tracking-[0.18em] text-terracotta uppercase">How you travel</p>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl">Choose a tour type</h2>
-        </BlurFade>
-        <div className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {tourTypes.map((type, index) => (
-            <BlurFade key={type.name} inView delay={0.07 * index}>
-              <Link to="/tours" className="group relative block h-44 overflow-hidden rounded-3xl sm:h-60">
-                <img
-                  src={type.image}
-                  alt=""
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-ink/40 transition duration-500 group-hover:bg-ink/25" />
-                <p className="absolute bottom-4 left-4 font-display text-2xl text-cream transition duration-500 group-hover:-translate-y-1">
-                  {type.name}
-                </p>
-              </Link>
-            </BlurFade>
-          ))}
-        </div>
-      </section>
-
-      <section className="overflow-hidden bg-teal text-cream">
-        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-5">
-          <BlurFade inView>
-            <p className="text-xs font-semibold tracking-[0.18em] text-sand uppercase">Travelers</p>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl">What people write back</h2>
-          </BlurFade>
-          <div className="mt-8">
-            <Marquee pauseOnHover className="[--duration:38s] [--gap:1rem]">
-              {reviews.map((review) => (
-                <blockquote key={review.name} className="w-80 rounded-3xl bg-teal-dark/60 p-5 sm:w-96 sm:p-6">
-                  <p className="font-display text-xl leading-snug sm:text-2xl">“{review.quote}”</p>
-                  <footer className="mt-4 text-sm text-cream/70">
-                    {review.name}
-                    <span className="block text-cream/50">{review.place}</span>
-                  </footer>
-                </blockquote>
-              ))}
-            </Marquee>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-5">
-        <BlurFade inView>
-          <div className="relative overflow-hidden rounded-[2rem] bg-ink text-cream sm:grid sm:grid-cols-2">
-            <BorderBeam size={140} duration={8} borderWidth={1.5} />
             <img
-              src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80"
-              alt="A quiet beach"
-              className="h-56 w-full object-cover transition duration-700 hover:scale-105 sm:h-full"
+              src={evoqueImages.about}
+              alt="A traveler looking over a city from a window"
+              className="h-72 w-full rounded-2xl object-cover shadow-xl shadow-ink/10 sm:h-96"
             />
-            <div className="p-6 sm:p-10">
-              <p className="text-xs font-semibold tracking-[0.18em] text-sand uppercase">Plan ahead</p>
-              <h2 className="mt-2 font-display text-3xl leading-tight sm:text-4xl">
-                Warm-weather trips fill first. Ask before the dates lock.
-              </h2>
-              <p className="mt-3 text-sm leading-6 text-cream/70">
-                No automatic discount banner. An agent checks availability, then tells you what the trip actually costs.
-              </p>
-              <Link
-                to="/contact"
-                className="mt-6 inline-flex rounded-full bg-terracotta px-5 py-3 font-semibold text-cream transition duration-300 hover:scale-[1.03] hover:bg-sand hover:text-ink"
-              >
-                Get started
-              </Link>
+          </BlurFade>
+          <BlurFade inView delay={0.1}>
+            <p className="font-script text-3xl text-[#3E97B3]">About the desk</p>
+            <h2 className="mt-2 font-display text-3xl leading-tight text-ink sm:text-4xl">
+              Travel that looks as good as it feels
+            </h2>
+            <p className="mt-4 text-base leading-7 text-mist">
+              Looking for a quiet beach week, a first honeymoon, or a route with a bit more walking? Consultants here
+              build the trip around that, then write back with what is included.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-4 text-sm font-medium text-teal">
+              <span className="inline-flex items-center gap-2">
+                <BadgeCheck size={18} /> Bespoke planning
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Clock3 size={18} /> Fast replies
+              </span>
             </div>
-          </div>
-        </BlurFade>
+            <Link to="/about" className="mt-6 inline-flex text-sm font-semibold text-teal underline decoration-sand decoration-2 underline-offset-4 hover:text-terracotta">
+              About Twenty 4 Seven Travel
+            </Link>
+          </BlurFade>
+        </div>
       </section>
     </MotionConfig>
   )

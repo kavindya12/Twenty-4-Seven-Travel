@@ -1,4 +1,4 @@
-const DESK_EMAIL = process.env.AGENT_EMAIL || "Contact@twenty4seventravel.com"
+const DESK_EMAIL = process.env.AGENT_EMAIL || "support@twenty4seventravel.com"
 
 function text(value, max) {
   return typeof value === "string" ? value.trim().slice(0, max) : ""
@@ -63,6 +63,37 @@ export default async function handler(req, res) {
       message: "Please correct the highlighted fields.",
     })
     return
+  }
+
+  const sheetUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL?.trim()
+  if (sheetUrl) {
+    try {
+      await fetch(sheetUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          secret: process.env.GOOGLE_SHEETS_SECRET?.trim() || undefined,
+          submittedAt: new Date().toISOString(),
+          name,
+          email,
+          phone,
+          packageId: text(enquiry.packageId, 80),
+          packageName,
+          origin,
+          destination,
+          tripType: enquiry.tripType || "one-way",
+          travelDate,
+          returnDate,
+          adults,
+          youth,
+          children,
+          infants,
+          message,
+        }),
+      })
+    } catch (error) {
+      console.error("Failed to append enquiry to Google Sheet", error)
+    }
   }
 
   const site = req.headers.origin || "https://www.twenty4seventravel.com"

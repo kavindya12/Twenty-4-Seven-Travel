@@ -1,16 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-display: "Playfair Display", "Times New Roman", serif;
   --font-sans: "Outfit", "Segoe UI", sans-serif;
-  --color-cream: #f4efe6;
-  --color-cream-deep: #e6ddd0;
-  --color-ink: #14181c;
-  --color-teal: #1b4338;
-  --color-teal-dark: #102820;
-  --color-sand: #e7b15a;
-  --color-terracotta: #e15a3a;
-  --color-mist: #5e675f;
+  --font-script: "Allura", "Segoe Script", cursive;
+  --color-loader-teal: #3e97b3;
+  --color-cream: #f9f6f0;
+  --color-cream-deep: #ece4d8;
+  --color-ink: #121619;
+  --color-teal: #0f2e36;
+  --color-teal-dark: #0a1f25;
+  --color-accent: #3e97b3;
+  --color-accent-dark: #2a7f99;
+  --color-accent-light: #7ecde0;
+  --color-sand: #d4a853;
+  --color-terracotta: #3e97b3;
+  --color-mist: #5c6568;
   --animate-marquee: marquee 40s linear infinite;
   --animate-marquee-vertical: marquee-vertical 40s linear infinite;
   --animate-kenburns: kenburns 22s ease-in-out infinite alternate;
@@ -52,6 +57,63 @@
       transform: translateY(-14px);
     }
   }
+
+  @keyframes loader-fill {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes flight-dash {
+    to {
+      stroke-dashoffset: -120;
+    }
+  }
+}
+
+.font-script {
+  font-family: var(--font-script);
+  letter-spacing: 0.02em;
+}
+
+.loader-brand-fill {
+  clip-path: inset(0 100% 0 0);
+  animation: loader-fill 1.8s ease-in-out forwards;
+}
+
+.loader-brand-fill-delay {
+  animation-delay: 0.35s;
+}
+
+.loader-progress-bar {
+  width: 0;
+  animation: loader-progress 2.2s ease-in-out forwards;
+}
+
+.spaced-title {
+  letter-spacing: 0.12em;
+  text-transform: none;
+}
+
+@keyframes loader-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.flight-path-draw {
+  stroke-dasharray: 6 10;
+  animation: flight-dash 24s linear infinite;
+}
+
+.flight-path-draw-delay {
+  animation-delay: -8s;
 }
 
 html {
@@ -65,6 +127,54 @@ body {
   background: var(--color-cream);
   color: var(--color-ink);
   overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+.surface-card {
+  border-radius: 1.25rem;
+  background: white;
+  border: 1px solid rgba(20, 24, 28, 0.06);
+  box-shadow: 0 1px 2px rgba(20, 24, 28, 0.04), 0 12px 40px rgba(20, 24, 28, 0.06);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 24px rgba(62, 151, 179, 0.28);
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-dark);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 img {
@@ -78,18 +188,35 @@ select {
   min-width: 0;
 }
 
-dialog {
-  width: min(40rem, calc(100vw - 1rem));
-  max-height: calc(100dvh - 1rem);
-  margin: auto;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  overflow: auto;
+/* Hide native <dialog> UI (browser “Close” chip) if any stale markup or cache loads it */
+dialog,
+dialog::backdrop,
+dialog[open],
+dialog:modal {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
 }
 
-dialog::backdrop {
-  background: rgba(23, 33, 30, 0.62);
+header button[popovertarget],
+header dialog {
+  display: none !important;
+}
+
+.modal-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(62, 151, 179, 0.55) transparent;
+}
+
+.modal-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(62, 151, 179, 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {

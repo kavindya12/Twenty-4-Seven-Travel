@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Minus, Plus, X } from "lucide-react"
-import { useEffect, useId, useRef, useState, type ReactNode } from "react"
+import { Minus, Plus } from "lucide-react"
+import { useEffect, useId, useState, type ReactNode } from "react"
 import { useForm } from "react-hook-form"
 import { todayISODate } from "../lib/dates"
 import { EnquirySubmitError, submitEnquiry } from "../lib/api"
 import { AirportSearch } from "./AirportSearch"
+import { ModalOverlay } from "./ModalOverlay"
 import {
   enquiryFormSchema,
   travelerFields,
@@ -24,7 +25,7 @@ type ContactAgentModalProps = {
 }
 
 const fieldClass =
-  "mt-1.5 w-full rounded-xl border border-ink/15 bg-white px-3 py-2.5 text-ink outline-none focus:border-teal"
+  "mt-1.5 w-full rounded-xl border border-ink/15 bg-white px-3 py-2.5 text-ink outline-none focus:border-accent"
 
 export function ContactAgentModal({
   packageId,
@@ -35,7 +36,6 @@ export function ContactAgentModal({
   open = false,
   onClose,
 }: ContactAgentModalProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null)
   const titleId = useId()
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
@@ -64,19 +64,6 @@ export function ContactAgentModal({
     infants: watch("infants"),
   }
   const travelerTotal = counts.adults + counts.youth + counts.children + counts.infants
-
-  useEffect(() => {
-    if (presentation !== "modal") return
-    const dialog = dialogRef.current
-    if (!dialog) return
-
-    if (open && !dialog.open) {
-      dialog.showModal()
-    }
-    if (!open && dialog.open) {
-      dialog.close()
-    }
-  }, [open, presentation])
 
   useEffect(() => {
     if (presentation === "inline" || open) {
@@ -133,28 +120,16 @@ export function ContactAgentModal({
   }
 
   const form = (
-    <div className="w-full rounded-3xl bg-cream p-4 shadow-xl ring-1 ring-ink/10 sm:p-8">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h2 id={titleId} className="font-display text-2xl text-teal sm:text-3xl">
-            Contact Travel Agent
-          </h2>
-          {packageId !== "general" ? (
-            <>
-              <p className="mt-3 text-sm text-mist">Package</p>
-              <p className="font-medium">{packageName}</p>
-            </>
-          ) : null}
-        </div>
-        {presentation === "modal" ? (
-          <button
-            type="button"
-            className="rounded-full p-2 text-ink hover:bg-cream-deep"
-            aria-label="Close"
-            onClick={onClose}
-          >
-            <X />
-          </button>
+    <div className="w-full rounded-none bg-white p-5 shadow-2xl ring-1 ring-ink/8 sm:rounded-3xl sm:p-8">
+      <div>
+        <h2 id={titleId} className="font-display text-2xl text-ink sm:text-3xl">
+          Contact Travel Agent
+        </h2>
+        {packageId !== "general" ? (
+          <>
+            <p className="mt-3 text-sm text-mist">Package</p>
+            <p className="font-medium">{packageName}</p>
+          </>
         ) : null}
       </div>
 
@@ -208,8 +183,8 @@ export function ContactAgentModal({
                     aria-pressed={selected}
                     className={`rounded-full border px-2 py-2.5 text-sm font-medium transition ${
                       selected
-                        ? "border-teal bg-teal text-cream"
-                        : "border-ink/15 bg-white text-ink hover:border-teal/40"
+                        ? "border-accent bg-accent text-white"
+                        : "border-ink/15 bg-white text-ink hover:border-accent/40"
                     }`}
                     onClick={() => {
                       setValue("tripType", option.value, { shouldValidate: true })
@@ -286,7 +261,7 @@ export function ContactAgentModal({
           <button
             type="submit"
             disabled={sending}
-            className="w-full rounded-full bg-terracotta px-5 py-3 font-semibold text-cream hover:bg-terracotta/90 disabled:opacity-60"
+            className="w-full rounded-full bg-accent px-5 py-3 font-semibold text-white hover:bg-accent-dark disabled:opacity-60"
           >
             {sending ? "Sending enquiry..." : "Send Inquiry"}
           </button>
@@ -300,19 +275,9 @@ export function ContactAgentModal({
   }
 
   return (
-    <dialog
-      ref={dialogRef}
-      aria-labelledby={titleId}
-      className="bg-transparent"
-      onClose={onClose}
-      onClick={(event) => {
-        if (event.target === dialogRef.current) {
-          onClose?.()
-        }
-      }}
-    >
+    <ModalOverlay open={open} onClose={onClose} labelledBy={titleId}>
       {form}
-    </dialog>
+    </ModalOverlay>
   )
 }
 
