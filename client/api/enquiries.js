@@ -170,6 +170,6 @@ ${DESK_EMAIL}`,
     success: false,
     message:
       mailResult.error ||
-      "We saved your details but could not notify the desk. Email us at support@twenty4seventravel.com or try again shortly.",
+      "We could not notify the desk by email. Please write to support@twenty4seventravel.com or try again shortly.",
   })
 }

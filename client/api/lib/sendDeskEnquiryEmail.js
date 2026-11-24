@@ -153,6 +153,18 @@ ${deskEmail()}
   return { delivered: true, method: "resend" }
 }
 
+async function readJsonSafe(response) {
+  const raw = await response.text()
+  try {
+    return JSON.parse(raw)
+  } catch {
+    if (raw.trimStart().startsWith("<")) {
+      return { success: false, message: "Email relay returned an HTML error page." }
+    }
+    return { success: false, message: raw.slice(0, 160) || "Invalid response from email relay." }
+  }
+}
+
 async function sendWithFormSubmit({ site, fields }) {
   const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(deskEmail())}`, {
     method: "POST",
@@ -166,7 +178,7 @@ async function sendWithFormSubmit({ site, fields }) {
     signal: AbortSignal.timeout(FORM_TIMEOUT_MS),
   })
 
-  const result = await response.json()
+  const result = await readJsonSafe(response)
   const ok = result.success === true || result.success === "true"
   if (!ok) {
     const message = result.message || `HTTP ${response.status}`
@@ -181,6 +193,10 @@ async function sendWithFormSubmit({ site, fields }) {
   }
 
   return { delivered: true, method: "formsubmit" }
+}
+
+function deskMailNotConfiguredMessage() {
+  return "Desk email is not configured yet. In Vercel, add SMTP_USER and SMTP_PASS (Zoho app password) for support@twenty4seventravel.com, then redeploy."
 }
 
 export async function sendDeskEnquiryEmail({ site, fields, details }) {
@@ -216,10 +232,14 @@ export async function sendDeskEnquiryEmail({ site, fields, details }) {
     }
   }
 
-  try {
-    return await sendWithFormSubmit({ site, fields })
-  } catch (error) {
-    const detail = error instanceof Error ? error.message : "FormSubmit failed"
-    return { delivered: false, method: "formsubmit", error: detail }
+  if (process.env.ENABLE_FORMSUBMIT === "true") {
+    try {
+      return await sendWithFormSubmit({ site, fields })
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : "FormSubmit failed"
+      return { delivered: false, method: "formsubmit", error: detail }
+    }
   }
+
+  return { delivered: false, method: "none", error: deskMailNotConfiguredMessage() }
 }

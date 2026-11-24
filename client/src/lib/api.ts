@@ -71,9 +71,15 @@ async function submitToApi(payload: EnquiryPayload) {
     errors?: Record<string, string>
   } = {}
 
+  const raw = await response.text()
   try {
-    body = (await response.json()) as typeof body
+    body = JSON.parse(raw) as typeof body
   } catch {
+    if (raw.trimStart().startsWith("<!DOCTYPE") || raw.trimStart().startsWith("<html")) {
+      throw new EnquirySubmitError(
+        "The enquiry service is temporarily misconfigured. Please email support@twenty4seventravel.com directly.",
+      )
+    }
     throw new EnquirySubmitError("The server returned an unexpected response. Please try again.")
   }
 
