@@ -50,6 +50,23 @@ Frontend variable in `client/.env`:
 VITE_API_URL=http://localhost:5000
 ```
 
+### Live site (Vercel)
+
+The contact form calls `POST /api/enquiries` on the same domain. **Email is not sent by FormSubmit alone** (it often hangs from serverless). Add these in the Vercel project **Settings → Environment Variables** (Production), then redeploy:
+
+| Variable | Example |
+|----------|---------|
+| `AGENT_EMAIL` | `support@twenty4seventravel.com` |
+| `FROM_EMAIL` | `support@twenty4seventravel.com` |
+| `SMTP_HOST` | `smtp.zoho.com` (or `smtp.office365.com` for Microsoft) |
+| `SMTP_PORT` | `587` |
+| `SMTP_USER` | Desk mailbox address |
+| `SMTP_PASS` | Zoho **App password** or Microsoft 365 password |
+| `GOOGLE_SHEETS_WEBHOOK_URL` | Apps Script deploy URL (optional backup log) |
+| `GOOGLE_SHEETS_SECRET` | Same secret as in the Apps Script |
+
+Mail order: **SMTP** → Resend (if `RESEND_API_KEY` is set) → FormSubmit. If email and the sheet both fail, the form shows an error instead of a false success.
+
 ## Run
 
 ```bash

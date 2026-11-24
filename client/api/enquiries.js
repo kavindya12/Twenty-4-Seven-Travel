@@ -1,3 +1,5 @@
+import { sendDeskEnquiryEmail } from "./lib/sendDeskEnquiryEmail.js"
+
 const DESK_EMAIL = process.env.AGENT_EMAIL || "support@twenty4seventravel.com"
 
 function text(value, max) {
@@ -48,7 +50,7 @@ export default async function handler(req, res) {
   const origin = text(enquiry.origin, 160)
   const destination = text(enquiry.destination, 160)
   const packageName = text(enquiry.packageName, 120) || "General enquiry"
-  const tripType = enquiry.tripType === "round-trip" ? "Round Trip" : "One Way"
+  const tripTypeLabel = enquiry.tripType === "round-trip" ? "Round Trip" : "One Way"
   const travelDate = text(enquiry.travelDate, 10)
   const returnDate = text(enquiry.returnDate, 10)
   const message = text(enquiry.message, 2000)
@@ -65,16 +67,19 @@ export default async function handler(req, res) {
     return
   }
 
+  const submittedAt = new Date().toISOString()
+  let sheetLogged = false
+
   const sheetUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL?.trim()
   if (sheetUrl) {
     try {
-      await fetch(sheetUrl, {
+      const sheetResponse = await fetch(sheetUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: AbortSignal.timeout(12_000),
         body: JSON.stringify({
           secret: process.env.GOOGLE_SHEETS_SECRET?.trim() || undefined,
-          submittedAt: new Date().toISOString(),
+          submittedAt,
           name,
           email,
           phone,
@@ -92,6 +97,7 @@ export default async function handler(req, res) {
           message,
         }),
       })
+      sheetLogged = sheetResponse.ok
     } catch (error) {
       console.error("Failed to append enquiry to Google Sheet", error)
     }
@@ -105,7 +111,7 @@ export default async function handler(req, res) {
     package: packageName,
     from: origin,
     to: destination,
-    tripType,
+    tripType: tripTypeLabel,
     travelDate: longDate(travelDate),
     returnDate: returnDate ? longDate(returnDate) : "Not required",
     travelers: `Adults (16+): ${adults}
@@ -129,38 +135,41 @@ Twenty 4 Seven Travel
 ${DESK_EMAIL}`,
   })
 
-  try {
-    const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(DESK_EMAIL)}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-        Origin: site,
-        Referer: `${site}/contact`,
-      },
-      body: fields.toString(),
-      signal: AbortSignal.timeout(12_000),
-    })
-    const result = await response.json()
-    if (result.success !== true && result.success !== "true") {
-      console.error("Desk email was not accepted", result.message)
-      res.status(200).json({
-        success: true,
-        message: "Thank you. Our agent will contact you soon.",
-      })
-      return
-    }
-  } catch (error) {
-    console.error("Failed to send enquiry email", error)
-    res.status(200).json({
+  const mailResult = await sendDeskEnquiryEmail({
+    site,
+    fields,
+    details: {
+      name,
+      email,
+      phone,
+      packageName,
+      origin,
+      destination,
+      tripType: tripTypeLabel,
+      travelDate: longDate(travelDate),
+      returnDate: returnDate ? longDate(returnDate) : "",
+      adults,
+      youth: Number.isInteger(youth) ? youth : 0,
+      children: Number.isInteger(children) ? children : 0,
+      infants: Number.isInteger(infants) ? infants : 0,
+      message,
+      submittedAt,
+    },
+  })
+
+  if (mailResult.delivered || sheetLogged) {
+    res.status(201).json({
       success: true,
       message: "Thank you. Our agent will contact you soon.",
     })
     return
   }
 
-  res.status(201).json({
-    success: true,
-    message: "Thank you. Our agent will contact you soon.",
+  console.error("Enquiry email not delivered", mailResult.error)
+  res.status(503).json({
+    success: false,
+    message:
+      mailResult.error ||
+      "We saved your details but could not notify the desk. Email us at support@twenty4seventravel.com or try again shortly.",
   })
 }

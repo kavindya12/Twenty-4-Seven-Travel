@@ -261,5 +261,19 @@ export async function sendEnquiryEmails(enquiry: Enquiry) {
     return { delivered: false, attempted: false }
   }
 
+  const messages = [agentEmail(enquiry), customerEmail(enquiry)]
+
+  if (smtpConfigured()) {
+    const smtpResult = await sendWithSmtp(messages)
+    if (smtpResult.delivered) return smtpResult
+    console.error("SMTP did not deliver the desk enquiry; trying next provider.")
+  }
+
+  const resendResult = await sendWithResend(messages)
+  if (resendResult?.delivered) return resendResult
+  if (resendResult) {
+    console.error("Resend did not deliver the desk enquiry; trying FormSubmit.")
+  }
+
   return sendWithFormSubmit(enquiry)
 }
