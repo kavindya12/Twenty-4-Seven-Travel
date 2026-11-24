@@ -71,6 +71,7 @@ export default async function handler(req, res) {
       await fetch(sheetUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(12_000),
         body: JSON.stringify({
           secret: process.env.GOOGLE_SHEETS_SECRET?.trim() || undefined,
           submittedAt: new Date().toISOString(),
@@ -138,6 +139,7 @@ ${DESK_EMAIL}`,
         Referer: `${site}/contact`,
       },
       body: fields.toString(),
+      signal: AbortSignal.timeout(12_000),
     })
     const result = await response.json()
     if (result.success !== true && result.success !== "true") {

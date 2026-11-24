@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom"
+import { FooterSocialLinks } from "./FooterSocialLinks"
 import { businessRegistration, contactLines, deskLocation, supportEmail } from "../lib/contact"
 import { evoqueImages } from "../lib/evoqueAssets"
 
@@ -9,8 +10,6 @@ const quickLinks = [
   { to: "/faq", label: "FAQ" },
   { to: "/contact", label: "Contact Us" },
 ]
-
-const paymentLabels = ["Visa", "Mastercard", "Amex", "Apple Pay", "Google Pay"]
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -73,49 +72,16 @@ export function Footer() {
                 BR <span className="text-cream/85">{businessRegistration}</span>
               </p>
             </address>
-            <div className="mt-6 flex items-center gap-3">
-              <a
-                href="https://web.facebook.com/people/Twenty-4-Seven-Travel/61595064282608/?sk=grid"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Facebook"
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white transition hover:bg-accent-dark"
-              >
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
-                  <path d="M14.5 8.5V6.8c0-.7.5-1 1.2-1H17V3h-2.1C12.2 3 11 4.4 11 6.6v1.9H9v2.8h2V21h3.5v-9.7h2.3l.4-2.8h-2.7Z" />
-                </svg>
-              </a>
-              <a
-                href="https://www.instagram.com/twent_y4seventravel/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white transition hover:bg-accent-dark"
-              >
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
-                  <path d="M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5Zm8 1.8H8A3.2 3.2 0 0 0 4.8 8v8A3.2 3.2 0 0 0 8 19.2h8a3.2 3.2 0 0 0 3.2-3.2V8A3.2 3.2 0 0 0 16 4.8Zm-4 2.5a4.7 4.7 0 1 1 0 9.4 4.7 4.7 0 0 1 0-9.4Zm0 1.8a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8Zm4.8-2.1a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z" />
-                </svg>
-              </a>
-            </div>
+            <FooterSocialLinks />
           </div>
         </div>
       </div>
 
       <div className="relative border-t border-cream/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-5 sm:flex-row sm:px-6">
-          <p className="text-center text-xs text-cream/45 sm:text-left">
+        <div className="mx-auto max-w-7xl px-4 py-5 text-center sm:px-6">
+          <p className="text-xs text-cream/45">
             ©{year}, Twenty 4 Seven Travel. BR {businessRegistration}. All Rights Reserved.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-2" aria-label="Accepted payment methods">
-            {paymentLabels.map((label) => (
-              <span
-                key={label}
-                className="rounded border border-cream/15 bg-white/5 px-2 py-1 text-[10px] font-semibold tracking-wide text-cream/55 uppercase"
-              >
-                {label}
-              </span>
-            ))}
-          </div>
         </div>
       </div>
     </footer>

@@ -1,29 +1,16 @@
-import { BadgeCheck, Clock3, Compass, Headphones, Luggage, ShieldCheck } from "lucide-react"
+import { BadgeCheck, Clock3 } from "lucide-react"
 import { MotionConfig } from "motion/react"
 import { Link } from "react-router-dom"
 import { RecommendedTripsSection } from "../components/RecommendedTripsSection"
-import { SpacedTitle } from "../components/SpacedTitle"
 import { BlurFade } from "../components/magic/BlurFade"
 import { Marquee } from "../components/magic/Marquee"
-import { AnimatedCounter } from "../components/motion/AnimatedCounter"
+import { WhyChooseUsSection } from "../components/WhyChooseUsSection"
 import { FlightPathDecor } from "../components/motion/FlightPathDecor"
 import { TestimonialsCarousel } from "../components/motion/TestimonialsCarousel"
 import { TornEdge } from "../components/motion/TornEdge"
 import { SectionHeading } from "../components/SectionHeading"
 import { destinations, getOutboundPackages, tourTypes } from "../data/trips"
 import { evoqueImages } from "../lib/evoqueAssets"
-
-const trustStats: Array<{
-  icon: typeof Luggage
-  label: string
-  value?: string
-  title?: string
-}> = [
-  { icon: Luggage, value: "6+", label: "Curated destinations" },
-  { icon: Compass, title: "Expert planning", label: "Tailored itineraries around your needs." },
-  { icon: ShieldCheck, title: "Trusted service", label: "Reliable bookings and human review." },
-  { icon: Headphones, title: "24/7 support", label: "We are with you every step of the way." },
-]
 
 const reviews = [
   {
@@ -97,34 +84,7 @@ export function HomePage() {
 
       <div className="relative bg-white">
         <TornEdge fill="#14181c" className="-mb-px" />
-        <section className="relative overflow-hidden bg-ink py-16 text-cream sm:py-20">
-          <FlightPathDecor variant="dark" />
-          <div className="relative mx-auto max-w-6xl px-4 sm:px-5">
-            <p className="font-script text-3xl text-accent-light">Why travelers choose us</p>
-            <SpacedTitle light className="mt-3 max-w-4xl text-2xl sm:text-4xl lg:text-[2.75rem]">
-              Trusted travel planning. Curated experiences. Stress-free holidays.
-            </SpacedTitle>
-            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {trustStats.map((item, index) => (
-                <BlurFade key={item.title ?? item.value ?? item.label} inView delay={0.05 * index}>
-                  <div className="text-center lg:text-left">
-                    <span className="inline-flex rounded-2xl border border-cream/10 bg-white/5 p-3 text-sand">
-                      <item.icon size={22} />
-                    </span>
-                    {item.value ? (
-                      <p className="mt-4 font-display text-4xl text-accent-light sm:text-5xl">
-                        <AnimatedCounter value={item.value} />
-                      </p>
-                    ) : (
-                      <p className="mt-4 font-display text-xl text-cream capitalize sm:text-2xl">{item.title}</p>
-                    )}
-                    <p className="mt-2 text-sm font-medium text-cream/65">{item.label}</p>
-                  </div>
-                </BlurFade>
-              ))}
-            </div>
-          </div>
-        </section>
+        <WhyChooseUsSection />
         <TornEdge flip fill="#14181c" className="-mt-px" />
       </div>
 

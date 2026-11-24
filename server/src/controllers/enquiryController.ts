@@ -47,26 +47,15 @@ export async function createEnquiry(req: Request, res: Response) {
     return
   }
 
-  try {
-    const emailResult = await sendEnquiryEmails(enquiry)
-    if (!emailResult.delivered) {
-      res.status(200).json({
-        success: true,
-        message: "Thank you. Our agent will contact you soon.",
-      })
-      return
-    }
-  } catch (error) {
-    console.error("Failed to send enquiry email", error)
-    res.status(200).json({
-      success: true,
-      message: "Thank you. Our agent will contact you soon.",
-    })
-    return
-  }
-
   res.status(201).json({
     success: true,
     message: "Thank you. Our agent will contact you soon.",
+  })
+
+  void sendEnquiryEmails(enquiry).catch((error) => {
+    console.error("Failed to send enquiry email", error)
+  })
+  void appendEnquiryToGoogleSheet(enquiry).catch((error) => {
+    console.error("Failed to append enquiry to Google Sheet", error)
   })
 }

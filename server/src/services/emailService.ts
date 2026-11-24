@@ -244,6 +244,7 @@ ${deskEmail()}`,
       Referer: `${origin}/contact`,
     },
     body: fields.toString(),
+    signal: AbortSignal.timeout(12_000),
   })
 
   const body = (await response.json()) as { success?: string | boolean; message?: string }
