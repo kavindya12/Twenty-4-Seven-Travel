@@ -11,8 +11,12 @@ function fromEmail() {
   return (process.env.FROM_EMAIL || deskEmail()).trim()
 }
 
+function smtpUser() {
+  return (process.env.SMTP_USER || fromEmail()).trim()
+}
+
 function smtpConfigured() {
-  return Boolean(process.env.SMTP_USER && process.env.SMTP_PASS && fromEmail() && deskEmail())
+  return Boolean(process.env.SMTP_PASS?.trim() && smtpUser())
 }
 
 function resendConfigured() {
@@ -72,7 +76,7 @@ async function sendWithSmtp({ subject, agentText, customerEmail, customerName, p
     secure: false,
     requireTLS: true,
     auth: {
-      user: process.env.SMTP_USER,
+      user: smtpUser(),
       pass: process.env.SMTP_PASS,
     },
   })
@@ -196,7 +200,7 @@ async function sendWithFormSubmit({ site, fields }) {
 }
 
 function deskMailNotConfiguredMessage() {
-  return "Desk email is not configured yet. In Vercel, add SMTP_USER and SMTP_PASS (Zoho app password) for support@twenty4seventravel.com, then redeploy."
+  return "Desk email is not configured yet. In Vercel → Settings → Environment Variables, add one variable: SMTP_PASS = your Zoho app password, then Redeploy."
 }
 
 export async function sendDeskEnquiryEmail({ site, fields, details }) {
