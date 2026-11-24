@@ -1,6 +1,5 @@
 import { CircleDollarSign, Headphones, MapPinned, ShieldCheck, type LucideIcon } from "lucide-react"
 import { BlurFade } from "./magic/BlurFade"
-import { SectionHeading } from "./SectionHeading"
 
 const pillars: {
   icon: LucideIcon
@@ -12,80 +11,57 @@ const pillars: {
     icon: CircleDollarSign,
     stat: "0",
     title: "Hidden fees",
-    description: "Package prices are quoted clearly—taxes and inclusions explained before you commit.",
+    description: "Clear package pricing with taxes and inclusions explained up front.",
   },
   {
     icon: MapPinned,
     stat: "3",
     title: "Steps to book",
-    description: "Browse tours, share your dates, and confirm with a dedicated travel agent.",
+    description: "Browse tours, share your dates, and confirm with your agent.",
   },
   {
     icon: ShieldCheck,
     stat: "1",
     title: "Agent on your trip",
-    description: "One point of contact from enquiry to departure—documents and updates by email.",
+    description: "One contact from enquiry to departure, with updates by email.",
   },
   {
     icon: Headphones,
     stat: "24/7",
     title: "Real support",
-    description: "Talk to a person in Sri Lanka or the UK for changes, questions, and emergencies.",
+    description: "Reach a person in Sri Lanka or the UK when plans change.",
   },
 ]
 
 export function WhyChooseUsSection() {
   return (
-    <section className="relative overflow-hidden bg-[#0f1419] py-16 text-cream sm:py-20 lg:py-24">
-      <div
-        className="pointer-events-none absolute -left-32 top-0 h-80 w-80 rounded-full bg-accent/15 blur-3xl"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-accent-light/10 blur-3xl"
-        aria-hidden
-      />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03)_0%,transparent_40%,transparent_100%)]" aria-hidden />
-
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <section className="bg-ink py-16 text-cream sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <BlurFade inView>
-          <SectionHeading
-            light
-            scriptEyebrow
-            eyebrow="Why travelers choose us"
-            title="Honest pricing. Human help. Trips you can trust."
-            description="We keep the booking process simple and stay reachable long after you pack."
-          />
+          <p className="font-script text-[2rem] text-accent-light sm:text-4xl">Why travelers choose us</p>
+          <p className="mt-3 max-w-md font-sans text-sm leading-6 text-cream/60 sm:text-[0.9375rem]">
+            Simple booking, honest quotes, and real people when plans change.
+          </p>
         </BlurFade>
 
-        <div className="mt-12 grid gap-4 sm:mt-14 sm:grid-cols-2 sm:gap-5 lg:gap-6">
+        <ul className="mt-10 grid list-none gap-3 p-0 sm:mt-12 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           {pillars.map((item, index) => (
-            <BlurFade key={item.title} inView delay={0.05 * index}>
-              <article className="group relative h-full overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.04] p-6 shadow-lg shadow-black/20 backdrop-blur-sm transition duration-300 hover:border-accent/35 hover:bg-white/[0.07] sm:p-7 lg:p-8">
-                <div
-                  className="pointer-events-none absolute -right-6 -top-8 font-display text-[7rem] leading-none text-white/[0.04] transition group-hover:text-accent-light/[0.08]"
-                  aria-hidden
-                >
-                  {item.stat}
-                </div>
-
-                <div className="relative flex items-start justify-between gap-4">
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent/25 to-accent-light/10 text-sand ring-1 ring-white/10 transition group-hover:from-accent/40 group-hover:text-cream">
-                    <item.icon size={22} strokeWidth={1.75} aria-hidden />
-                  </span>
-                  <p className="font-display text-4xl leading-none tracking-tight text-accent-light sm:text-[2.75rem]">
-                    {item.stat}
-                  </p>
-                </div>
-
-                <h3 className="relative mt-6 font-display text-xl text-cream sm:text-2xl">{item.title}</h3>
-                <p className="relative mt-2.5 text-sm leading-relaxed text-cream/78 sm:text-[0.9375rem] sm:leading-7">
-                  {item.description}
-                </p>
-              </article>
+            <BlurFade key={item.title} inView delay={0.04 * index}>
+              <li className="h-full">
+                <article className="flex h-full flex-col rounded-2xl border border-white/[0.09] bg-white/[0.03] p-5 transition-colors duration-200 hover:border-accent/30 hover:bg-white/[0.05] sm:p-6">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-sans text-2xl font-semibold tabular-nums tracking-tight text-accent-light">
+                      {item.stat}
+                    </span>
+                    <item.icon className="shrink-0 text-accent-light/80" size={20} strokeWidth={1.5} aria-hidden />
+                  </div>
+                  <h3 className="mt-4 font-sans text-[0.9375rem] font-semibold tracking-tight text-cream">{item.title}</h3>
+                  <p className="mt-2 flex-1 font-sans text-sm leading-6 text-cream/55">{item.description}</p>
+                </article>
+              </li>
             </BlurFade>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   )
